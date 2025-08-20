@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紫微斗數線上排盤</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>紫微斗數排盤系統</h1>
+        
+        <form id="ziwei-form">
+            <div class="form-group">
+                <label for="name">姓名：</label>
+                <input type="text" id="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label>性別：</label>
+                <label><input type="radio" name="gender" value="male" checked> 男</label>
+                <label><input type="radio" name="gender" value="female"> 女</label>
+            </div>
+            
+            <div class="form-group">
+                <label for="birthdate">出生日期：</label>
+                <input type="date" id="birthdate" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="hour">出生時辰：</label>
+                <select id="hour" required>
+                    <option value="23">子時 (23:00-1:00)</option>
+                    <option value="1">丑時 (1:00-3:00)</option>
+                    <!-- 其他時辰... -->
+                </select>
+            </div>
+            
+            <button type="submit">開始排盤</button>
+        </form>
+        
+        <div id="result" class="chart-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
