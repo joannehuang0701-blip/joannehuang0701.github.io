@@ -3,45 +3,421 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>紫微斗數線上排盤</title>
-    <link rel="stylesheet" href="style.css">
+    <title>紫微斗數排盤系統</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .input-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+            min-width: 100px;
+            color: #495057;
+        }
+        input, select {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            flex: 1;
+            min-width: 200px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin: 20px auto;
+            display: block;
+            min-width: 200px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .result-section {
+            padding: 30px;
+            display: none;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        .personal-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 5px solid #2196f3;
+        }
+        .palace-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .palace {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ff9800;
+            text-align: center;
+            position: relative;
+            min-height: 180px;
+        }
+        .palace-header {
+            background: #ff9800;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin: -20px -20px 15px -20px;
+            font-weight: bold;
+        }
+        .stars {
+            margin-top: 10px;
+        }
+        .star {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 3px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .star-emperor {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef5350;
+        }
+        .star-major {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #66bb6a;
+        }
+        .star-minor {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #42a5f5;
+        }
+        .four-transformations {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .transformation {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #9c27b0;
+        }
+        footer {
+            text-align: center;
+            padding: 25px;
+            background: #f8f9fa;
+            color: #6c757d;
+            border-top: 1px solid #e9ecef;
+            margin-top: 30px;
+        }
+        @media (max-width: 768px) {
+            .palace-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .four-transformations {
+                grid-template-columns: 1fr;
+            }
+            .form-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            input, select {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>紫微斗數排盤系統</h1>
-        
-        <form id="ziwei-form">
+        <header>
+            <h1>紫微斗數排盤系統</h1>
+            <div class="subtitle">文墨天機風格 · 專業命理分析</div>
+        </header>
+
+        <section class="input-section">
             <div class="form-group">
                 <label for="name">姓名：</label>
-                <input type="text" id="name" required>
+                <input type="text" id="name" placeholder="請輸入姓名">
             </div>
             
             <div class="form-group">
                 <label>性別：</label>
-                <label><input type="radio" name="gender" value="male" checked> 男</label>
-                <label><input type="radio" name="gender" value="female"> 女</label>
+                <div>
+                    <input type="radio" id="male" name="gender" value="male" checked>
+                    <label for="male" style="display: inline; min-width: auto;">男</label>
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female" style="display: inline; min-width: auto;">女</label>
+                </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="birthdate">出生日期：</label>
                 <input type="date" id="birthdate" required>
             </div>
-            
+
             <div class="form-group">
                 <label for="hour">出生時辰：</label>
                 <select id="hour" required>
-                    <option value="23">子時 (23:00-1:00)</option>
-                    <option value="1">丑時 (1:00-3:00)</option>
-                    <!-- 其他時辰... -->
+                    <option value="23">子時 (23:00-01:00)</option>
+                    <option value="1">丑時 (01:00-03:00)</option>
+                    <option value="3">寅時 (03:00-05:00)</option>
+                    <option value="5">卯時 (05:00-07:00)</option>
+                    <option value="7">辰時 (07:00-09:00)</option>
+                    <option value="9">巳時 (09:00-11:00)</option>
+                    <option value="11">午時 (11:00-13:00)</option>
+                    <option value="13">未時 (13:00-15:00)</option>
+                    <option value="15">申時 (15:00-17:00)</option>
+                    <option value="17">酉時 (17:00-19:00)</option>
+                    <option value="19">戌時 (19:00-21:00)</option>
+                    <option value="21">亥時 (21:00-23:00)</option>
                 </select>
             </div>
-            
-            <button type="submit">開始排盤</button>
-        </form>
-        
-        <div id="result" class="chart-container"></div>
+
+            <button onclick="calculateZiWei()">開始排盤</button>
+        </section>
+
+        <section class="result-section" id="resultSection">
+            <div class="personal-info" id="personalInfo">
+                <!-- 個人資訊將由JavaScript填充 -->
+            </div>
+
+            <div class="chart-container">
+                <h2>命盤分析</h2>
+                <div class="palace-grid" id="palaceGrid">
+                    <!-- 宮位資訊將由JavaScript填充 -->
+                </div>
+            </div>
+
+            <div class="four-transformations" id="fourTransformations">
+                <!-- 四化星資訊將由JavaScript填充 -->
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2024 紫微斗數排盤系統 · 僅供參考</p>
+        </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // 紫微斗數核心計算函數
+        function calculateZiWei() {
+            // 獲取輸入值
+            const name = document.getElementById('name').value || '匿名';
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const birthdate = new Date(document.getElementById('birthdate').value);
+            const hour = parseInt(document.getElementById('hour').value);
+            
+            if (!document.getElementById('birthdate').value) {
+                alert('請選擇出生日期');
+                return;
+            }
+
+            // 計算農曆日期（簡化版）
+            const lunarDate = calculateLunarDate(birthdate);
+            
+            // 計算命宮位置
+            const palacePosition = calculatePalacePosition(birthdate, hour);
+            
+            // 排列星曜
+            const starChart = arrangeStars(palacePosition);
+            
+            // 計算四化星
+            const transformations = calculateFourTransformations(birthdate.getFullYear());
+            
+            // 顯示結果
+            displayResults(name, gender, birthdate, hour, lunarDate, palacePosition, starChart, transformations);
+            
+            // 顯示結果區域
+            document.getElementById('resultSection').style.display = 'block';
+            
+            // 滾動到結果區域
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateLunarDate(solarDate) {
+            // 簡化的農曆計算（實際應使用專業農曆算法）
+            const year = solarDate.getFullYear();
+            const month = solarDate.getMonth() + 1;
+            const day = solarDate.getDate();
+            return `${year}年${month}月${day}日`;
+        }
+
+        function calculatePalacePosition(birthdate, hour) {
+            // 簡化的命宮計算
+            const year = birthdate.getFullYear();
+            const month = birthdate.getMonth() + 1;
+            const hourBranch = Math.floor(hour / 2) % 12;
+            
+            // 子平法計算命宮
+            const palaceNum = (14 - month - hourBranch) % 12 || 12;
+            const stems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+            const branches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+            
+            const stemIndex = (year - 4) % 10;
+            const branchIndex = (palaceNum - 1) % 12;
+            
+            return stems[stemIndex] + branches[branchIndex];
+        }
+
+        function arrangeStars(palacePosition) {
+            // 簡化的星曜排列（實際應根據完整規則）
+            const branches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+            const palaceIndex = branches.indexOf(palacePosition[1]);
+            
+            const stars = [
+                ['紫微', '七殺'], ['天機'], ['太陽', '天梁'], ['武曲', '天相'],
+                ['天同'], ['廉貞', '天府'], ['太陰'], ['貪狼'],
+                ['巨門'], ['天相'], ['天梁'], ['破軍']
+            ];
+            
+            // 旋轉星曜位置以匹配命宮
+            const rotatedStars = [];
+            for (let i = 0; i < 12; i++) {
+                rotatedStars[(i + palaceIndex) % 12] = stars[i];
+            }
+            
+            return rotatedStars;
+        }
+
+        function calculateFourTransformations(year) {
+            // 簡化的四化星計算
+            const stem = (year - 4) % 10;
+            const transformations = [
+                { star: '廉貞', transformation: '化祿' },
+                { star: '破軍', transformation: '化權' },
+                { star: '武曲', transformation: '化科' },
+                { star: '太陽', transformation: '化忌' }
+            ];
+            
+            return transformations;
+        }
+
+        function displayResults(name, gender, birthdate, hour, lunarDate, palacePosition, starChart, transformations) {
+            // 顯示個人資訊
+            const genderText = gender === 'male' ? '男' : '女';
+            const hourText = `${hour}:00-${hour + 2}:00`;
+            
+            document.getElementById('personalInfo').innerHTML = `
+                <h2>${name} 的紫微命盤</h2>
+                <p>性別：${genderText} | 西曆生日：${birthdate.toLocaleDateString()}</p>
+                <p>農曆生日：${lunarDate} | 出生時辰：${hourText}</p>
+                <p>命宮位置：${palacePosition} | 五行局：城頭土5局</p>
+            `;
+            
+            // 顯示宮位星曜
+            const palaceNames = ['命宮', '兄弟', '夫妻', '子女', '財帛', '疾厄', '遷移', '交友', '官祿', '田宅', '福德', '父母'];
+            const branches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+            
+            let palaceHTML = '';
+            for (let i = 0; i < 12; i++) {
+                palaceHTML += `
+                    <div class="palace">
+                        <div class="palace-header">${branches[i]}宮 · ${palaceNames[i]}</div>
+                        <div class="stars">
+                            ${starChart[i] ? starChart[i].map(star => 
+                                `<span class="star ${star === '紫微' || star === '天府' ? 'star-emperor' : 
+                                  ['天機','太陽','武曲','天同','廉貞','太陰','貪狼','巨門','天相','天梁','七殺','破軍'].includes(star) ? 
+                                  'star-major' : 'star-minor'}">${star}</span>`
+                            ).join('') : '<span>無主星</span>'}
+                        </div>
+                    </div>
+                `;
+            }
+            document.getElementById('palaceGrid').innerHTML = palaceHTML;
+            
+            // 顯示四化星
+            let transformationsHTML = '';
+            transformations.forEach(t => {
+                transformationsHTML += `
+                    <div class="transformation">
+                        <h3>${t.star}${t.transformation}</h3>
+                        <p>${getTransformationMeaning(t.star, t.transformation)}</p>
+                    </div>
+                `;
+            });
+            document.getElementById('fourTransformations').innerHTML = transformationsHTML;
+        }
+
+        function getTransformationMeaning(star, transformation) {
+            const meanings = {
+                '化祿': '主財富、機遇',
+                '化權': '主權力、地位',
+                '化科': '主名聲、學業',
+                '化忌': '主挑戰、需要注意'
+            };
+            return `${star}${transformation}：${meanings[transformation]}`;
+        }
+
+        // 設置默認日期為今天
+        document.getElementById('birthdate').valueAsDate = new Date();
+    </script>
 </body>
 </html>
