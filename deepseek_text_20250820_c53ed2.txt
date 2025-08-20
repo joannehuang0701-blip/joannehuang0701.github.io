@@ -1,0 +1,5 @@
+ziwei-astrology/
+├── index.html       # 主頁面
+├── style.css       # 樣式表
+├── script.js       # JavaScript邏輯
+└── assets/         # 圖片等資源
